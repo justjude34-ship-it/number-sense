@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#000000">
+<title>Number Sense</title>
+<style>
+  :root { --gold:#d7b56a; --sapphire:#6f8fd6; --coral:#e07a62; --ink:#efeae2; --soft:#b7b1a6; --line:#2a2a2a; }
+  * { box-sizing: border-box; }
+  html, body { margin:0; background:#000; color:var(--ink); font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  body { min-height:100dvh; }
+  .app { max-width:480px; margin:0 auto; min-height:100dvh; padding:18px 16px 108px; }
+  .kicker { letter-spacing:.2em; text-transform:uppercase; font-size:11px; color:var(--gold); font-weight:700; margin:0 0 6px; }
+  h1 { font-family: Georgia, "Iowan Old Style", Palatino, serif; font-weight:500; font-size:32px; line-height:1.12; margin:0 0 8px; }
+  h2 { font-family: Georgia, serif; font-weight:500; font-size:22px; margin:0 0 8px; }
+  p { color:var(--soft); font-size:16px; line-height:1.5; margin:0 0 12px; }
+  .hero { background:#000; border-radius:24px; overflow:hidden; margin:8px 0 16px; border:1px solid #161616; }
+  svg { width:100%; height:auto; display:block; }
+  .ring { fill:none; stroke-linecap:round; transform-origin:180px 168px; }
+  .ring.a { stroke:var(--sapphire); stroke-width:1.4; stroke-dasharray:8 14; animation: spin 18s linear infinite; }
+  .ring.b { stroke:var(--coral); stroke-width:1.2; stroke-dasharray:3 18; animation: spin 26s linear infinite reverse; }
+  .spark { fill:#f4efe6; opacity:.7; transform-origin:180px 168px; animation: twinkle 3.6s ease-in-out infinite; }
+  .seven { fill:none; stroke:var(--gold); stroke-width:2.4; stroke-linecap:round; stroke-linejoin:round; stroke-dasharray:280; stroke-dashoffset:280; animation: draw 8s ease-in-out infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  @keyframes draw { 0% { stroke-dashoffset:280; } 42% { stroke-dashoffset:0; } 100% { stroke-dashoffset:0; } }
+  @keyframes twinkle { 0%,100% { opacity:.25; } 50% { opacity:.9; } }
+  .row { display:flex; gap:8px; margin:8px 0 14px; }
+  .chip { border:1px solid #2c2c2c; background:#0c0c0c; color:var(--ink); border-radius:999px; padding:8px 12px; font-size:13px; }
+  .card { background:#0c0c0c; border:1px solid #1c1c1c; border-radius:18px; padding:14px; margin:0 0 10px; }
+  button.card, button.navbtn, button.go, button.opt { font:inherit; color:inherit; text-align:left; width:100%; }
+  button.card { display:block; cursor:pointer; }
+  button.card b { display:block; font-size:16px; margin-bottom:4px; }
+  button.card span { color:var(--soft); font-size:13px; }
+  .go, .opt { background:#141414; border:1px solid #2a2a2a; border-radius:14px; padding:14px; margin:0 0 8px; cursor:pointer; }
+  .go { background:linear-gradient(90deg,#1a2438,#2a1c18); border-color:#3a3428; color:var(--gold); font-weight:650; }
+  .opt.on { border-color:var(--gold); color:var(--gold); }
+  label { display:block; font-size:13px; color:var(--soft); margin:10px 0 6px; }
+  input { width:100%; background:#000; color:var(--ink); border:1px solid #333; border-radius:12px; padding:12px; font-size:16px; }
+  .result { font-family: Georgia, serif; font-size:42px; color:var(--gold); margin:8px 0; }
+  nav { position:fixed; left:0; right:0; bottom:0; background:#000; border-top:1px solid #1c1c1c; display:flex; justify-content:center; padding:8px 10px calc(10px + env(safe-area-inset-bottom)); }
+  .navbtn { max-width:480px; flex:1; background:transparent; border:0; color:var(--soft); padding:10px 4px; font-size:12px; letter-spacing:.04em; cursor:pointer; }
+  .navbtn.on { color:var(--gold); }
+  .back { background:none; border:0; color:var(--sapphire); padding:0 0 10px; font-size:14px; cursor:pointer; }
+  .screen { display:none; }
+  .screen.on { display:block; }
+  @media (prefers-reduced-motion: reduce) { .ring, .seven, .spark { animation:none; } .seven { stroke-dashoffset:0; } }
+</style>
+</head>
+<body>
+<div class="app">
+  <section id="home" class="screen on">
+    <p class="kicker">NumeraKey Learn</p>
+    <h1>Number Sense</h1>
+    <p>A comprehensive Professional Numerology course.</p>
+    <div class="hero" aria-hidden="true">
+      <svg viewBox="0 0 360 336">
+        <rect width="360" height="336" fill="#000"/>
+        <circle class="ring a" cx="180" cy="168" r="112"/>
+        <circle class="ring b" cx="180" cy="168" r="132"/>
+        <circle class="spark" cx="292" cy="168" r="1.6"/>
+        <circle class="spark" cx="68" cy="168" r="1.4" style="animation-delay:-1.2s"/>
+        <circle class="spark" cx="180" cy="36" r="1.3" style="animation-delay:-.6s"/>
+        <path class="seven" d="M112 118h136L158 246"/>
+      </svg>
+    </div>
+    <div class="row">
+      <span class="chip" id="prog">0 of 12 done</span>
+      <span class="chip">Updated course</span>
+    </div>
+    <button class="go" onclick="show('course')">Continue the course</button>
+    <button class="card" onclick="show('lab')"><b>Lab</b><span>Add a birth date. Life path, birthday, attitude.</span></button>
+    <button class="card" onclick="show('numbers')"><b>Numbers</b><span>1 to 9, plus 11 and 22, in one line each.</span></button>
+  </section>
+  <section id="course" class="screen">
+    <p class="kicker">Course</p>
+    <h1>Twelve short lessons</h1>
+    <p>One idea at a time. Mark one done when it makes sense.</p>
+    <div id="list"></div>
+  </section>
+  <section id="lesson" class="screen">
+    <button class="back" onclick="show('course')">Back to course</button>
+    <p class="kicker" id="lk"></p>
+    <h1 id="lt"></h1>
+    <div id="lb"></div>
+    <button class="go" id="mark" onclick="mark()">Mark this done</button>
+    <button class="card" onclick="quiz()"><b>Check yourself</b><span id="qq"></span></button>
+    <div id="qa"></div>
+  </section>
+  <section id="lab" class="screen">
+    <p class="kicker">Lab</p>
+    <h1>Work a date</h1>
+    <p>Type a birthday. 11 and 22 are not reduced.</p>
+    <label for="bd">Birthday</label>
+    <input id="bd" type="date" onchange="calc()">
+    <div class="card"><b>Life path</b><div class="result" id="lp">–</div><span id="lpt"></span></div>
+    <div class="card"><b>Birthday number</b><div class="result" id="bn">–</div><span>The day of the month, reduced unless it is 11 or 22.</span></div>
+    <div class="card"><b>Attitude</b><div class="result" id="at">–</div><span>Month plus day. How you meet a room.</span></div>
+  </section>
+  <section id="numbers" class="screen">
+    <p class="kicker">Numbers</p>
+    <h1>The set</h1>
+    <p>A handle, not a verdict.</p>
+    <div id="nums"></div>
+  </section>
+</div>
+<nav>
+  <button class="navbtn on" data-s="home" onclick="show('home')">Home</button>
+  <button class="navbtn" data-s="course" onclick="show('course')">Course</button>
+  <button class="navbtn" data-s="lab" onclick="show('lab')">Lab</button>
+  <button class="navbtn" data-s="numbers" onclick="show('numbers')">Numbers</button>
+</nav>
+<script>
+const lessons = [
+  ["What a number is for","A number here is a habit of attention, not a fate. It describes a lean. It does not decide a life.",["Use it as a question.","Do not use it as a sentence on someone.","If it stings, check the arithmetic first."],"A number in this course is mainly…","A lean, not a verdict","A prediction","A name score"],
+  ["Add without rushing","Write the date as digits. Add them. If you land on 11 or 22, stop. Anything else, add again until one digit.",["29 March 1964 is 2+9+0+3+1+9+6+4.","Add across. Do not drop a zero.","11 and 22 stay whole."],"11 is…","Left as 11","Turned into 2","Ignored"],
+  ["Life path","The life path is the whole date, reduced. It is the long road, not the mood of a morning.",["Use the full date.","Keep 11 and 22.","Say it as a tendency, not a job title."],"Life path uses…","The whole birth date","Only the year","Only the name"],
+  ["Number 1","Starts things. Wants the lead. Can forget to bring people with them.",["Good at a first step.","Harder at shared credit.","Ask: who else is in this?"],"1 leans toward…","Starting","Waiting","Blending in"],
+  ["Number 2","Notices the room. Keeps the peace. Can vanish into someone else’s plan.",["Good at the join.","Harder at a clean no.","Ask: what do I actually want?"],"2 is strongest at…","The join between people","A solo charge","A public stage"],
+  ["Number 3","Words, colour, a light touch. Can scatter when the work gets dull.",["Good at expression.","Harder at finishing.","Ask: what is the one thing to complete?"],"3 can stall when…","The work turns dull","Someone praises them","They are talking"],
+  ["Number 4","Builds the frame. Likes a plan. Can grip the plan after it has stopped helping.",["Good at structure.","Harder at a late change.","Ask: is this order serving the job?"],"4 reaches for…","A frame","A whim","The spotlight"],
+  ["Number 5","Moves. Tries the next thing. Can leave before the useful part.",["Good at change.","Harder at staying.","Ask: have I stayed long enough to learn it?"],"5 is pulled by…","Change","A fixed desk","Repetition"],
+  ["Number 6","Looks after people and places. Can over-tend, then resent it.",["Good at care.","Harder at leaving it alone.","Ask: was I asked?"],"6 overdoes…","Care","Solitude","Risk"],
+  ["Number 7","Wants the quiet reason under the noise. Can withdraw and call it depth.",["Good at study.","Harder at being with the group.","Ask: have I said the finding out loud?"],"7 needs…","Quiet to think","A crowd to think","Constant chat"],
+  ["Number 8","Handles matter, money, weight. Can measure a person by output.",["Good at results.","Harder at rest.","Ask: what is enough?"],"8 watches…","Results","Mood alone","Gossip"],
+  ["Number 9, 11, 22","9 closes a cycle and gives it away. 11 is a 2 with a brighter signal. 22 is a 4 that can hold a larger build. Leave 11 and 22 whole.",["9 lets go.","11 feels the room early.","22 needs a real structure, not just a vision."],"22 should be…","Left as 22","Reduced to 4 at once","Dropped"]
+];
+const meanings = {1:"Starts. Wants the first move.",2:"Joins. Reads the room.",3:"Speaks. Scatters if bored.",4:"Frames. Holds the plan.",5:"Moves. Leaves early.",6:"Tends. Can over-tend.",7:"Studies. Needs quiet.",8:"Builds weight and results.",9:"Closes and gives away.",11:"A brighter 2. Leave it whole.",22:"A larger 4. Leave it whole."};
+let cur = 0;
+function load(){ try { return JSON.parse(localStorage.getItem("ns-done")||"[]"); } catch(e){ return []; } }
+function save(a){ localStorage.setItem("ns-done", JSON.stringify(a)); }
+function show(id){
+  document.querySelectorAll(".screen").forEach(s=>s.classList.remove("on"));
+  document.getElementById(id).classList.add("on");
+  document.querySelectorAll(".navbtn").forEach(b=>b.classList.toggle("on", b.dataset.s===id || (id==="lesson" && b.dataset.s==="course")));
+  if(id==="course") renderList();
+  if(id==="numbers") renderNums();
+  paint();
+  window.scrollTo(0,0);
+}
+function renderList(){
+  const done = load();
+  document.getElementById("list").innerHTML = lessons.map((L,i)=>`<button class="card" onclick="openL(${i})"><b>${i+1}. ${L[0]}</b><span>${done.includes(i)?"Done":"Not yet"}</span></button>`).join("");
+}
+function openL(i){
+  cur = i;
+  const L = lessons[i];
+  document.getElementById("lk").textContent = "Lesson "+(i+1);
+  document.getElementById("lt").textContent = L[0];
+  document.getElementById("lb").innerHTML = "<p>"+L[1]+"</p>"+L[2].map(x=>"<div class='card'>"+x+"</div>").join("");
+  document.getElementById("qq").textContent = L[3];
+  document.getElementById("qa").innerHTML = "";
+  document.getElementById("mark").textContent = load().includes(i) ? "Done" : "Mark this done";
+  show("lesson");
+}
+function mark(){
+  const a = load();
+  if(!a.includes(cur)) a.push(cur);
+  save(a);
+  document.getElementById("mark").textContent = "Done";
+  paint();
+}
+function quiz(){
+  const L = lessons[cur];
+  const opts = [L[4],L[5],L[6]];
+  document.getElementById("qa").innerHTML = opts.map((o,n)=>`<button class="opt" onclick="pick(this,${n})">${o}</button>`).join("");
+}
+function pick(el,n){
+  document.querySelectorAll("#qa .opt").forEach(x=>x.classList.remove("on"));
+  el.classList.add("on");
+  el.textContent += n===0 ? "  — yes" : "  — not this one";
+}
+function reduce(n){
+  if(n===11 || n===22) return n;
+  while(n>9){ n = String(n).split("").reduce((s,d)=>s+ +d,0); if(n===11||n===22) break; }
+  return n;
+}
+function calc(){
+  const v = document.getElementById("bd").value;
+  if(!v) return;
+  const [y,m,d] = v.split("-").map(Number);
+  const digits = (""+y+("0"+m).slice(-2)+("0"+d).slice(-2)).split("").reduce((s,c)=>s+ +c,0);
+  const lp = reduce(digits);
+  const bn = reduce(d);
+  const at = reduce(m+d);
+  document.getElementById("lp").textContent = lp;
+  document.getElementById("lpt").textContent = meanings[lp] || "";
+  document.getElementById("bn").textContent = bn;
+  document.getElementById("at").textContent = at;
+}
+function renderNums(){
+  document.getElementById("nums").innerHTML = Object.keys(meanings).map(k=>`<div class="card"><b>${k}</b><span>${meanings[k]}</span></div>`).join("");
+}
+function paint(){ document.getElementById("prog").textContent = load().length+" of "+lessons.length+" done"; }
+paint();
+</script>
+</body>
+</html>
