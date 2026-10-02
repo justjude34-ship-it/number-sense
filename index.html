@@ -16,6 +16,10 @@
   h2 { font-family: Georgia, serif; font-weight:500; font-size:22px; margin:0 0 8px; }
   p { color:var(--soft); font-size:16px; line-height:1.5; margin:0 0 12px; }
   .hero { background:#000; border-radius:24px; overflow:hidden; margin:8px 0 16px; border:1px solid #161616; }
+  .hero-photo { position:relative; width:100%; aspect-ratio:360/336; overflow:hidden; background:#000; }
+  .hero-photo img { width:100%; height:100%; object-fit:cover; object-position:center 30%; display:block; filter:brightness(.55) contrast(1.05) saturate(.85); }
+  .hero-overlay { position:absolute; inset:0; background:radial-gradient(ellipse at 50% 55%, rgba(0,0,0,0) 30%, rgba(0,0,0,.75) 100%); pointer-events:none; }
+  .hero-svg { position:absolute; inset:0; width:100%; height:100%; }
   svg { width:100%; height:auto; display:block; }
   .ring { fill:none; stroke-linecap:round; transform-origin:180px 168px; }
   .ring.a { stroke:var(--sapphire); stroke-width:1.4; stroke-dasharray:8 14; animation: spin 18s linear infinite; }
@@ -54,15 +58,18 @@
     <h1>Number Sense</h1>
     <p>A comprehensive Professional Numerology course.</p>
     <div class="hero" aria-hidden="true">
-      <svg viewBox="0 0 360 336">
-        <rect width="360" height="336" fill="#000"/>
-        <circle class="ring a" cx="180" cy="168" r="112"/>
-        <circle class="ring b" cx="180" cy="168" r="132"/>
-        <circle class="spark" cx="292" cy="168" r="1.6"/>
-        <circle class="spark" cx="68" cy="168" r="1.4" style="animation-delay:-1.2s"/>
-        <circle class="spark" cx="180" cy="36" r="1.3" style="animation-delay:-.6s"/>
-        <path class="seven" d="M112 118h136L158 246"/>
-      </svg>
+      <div class="hero-photo">
+        <img src="https://images.unsplash.com/photo-1584515933487-779824d29309?w=900&q=80" alt="" loading="lazy">
+        <div class="hero-overlay"></div>
+        <svg class="hero-svg" viewBox="0 0 360 336" preserveAspectRatio="xMidYMid slice">
+          <circle class="ring a" cx="180" cy="168" r="112"/>
+          <circle class="ring b" cx="180" cy="168" r="132"/>
+          <circle class="spark" cx="292" cy="168" r="1.6"/>
+          <circle class="spark" cx="68" cy="168" r="1.4" style="animation-delay:-1.2s"/>
+          <circle class="spark" cx="180" cy="36" r="1.3" style="animation-delay:-.6s"/>
+          <path class="seven" d="M112 118h136L158 246"/>
+        </svg>
+      </div>
     </div>
     <div class="row">
       <span class="chip" id="prog">0 of 12 done</span>
@@ -116,7 +123,7 @@ const lessons = [
   ["Add without rushing","Write the date as digits. Add them. If you land on 11 or 22, stop. Anything else, add again until one digit.",["29 March 1964 is 2+9+0+3+1+9+6+4.","Add across. Do not drop a zero.","11 and 22 stay whole."],"11 is…","Left as 11","Turned into 2","Ignored"],
   ["Life path","The life path is the whole date, reduced. It is the long road, not the mood of a morning.",["Use the full date.","Keep 11 and 22.","Say it as a tendency, not a job title."],"Life path uses…","The whole birth date","Only the year","Only the name"],
   ["Number 1","Starts things. Wants the lead. Can forget to bring people with them.",["Good at a first step.","Harder at shared credit.","Ask: who else is in this?"],"1 leans toward…","Starting","Waiting","Blending in"],
-  ["Number 2","Notices the room. Keeps the peace. Can vanish into someone else’s plan.",["Good at the join.","Harder at a clean no.","Ask: what do I actually want?"],"2 is strongest at…","The join between people","A solo charge","A public stage"],
+  ["Number 2","Notices the room. Keeps the peace. Can vanish into someone else's plan.",["Good at the join.","Harder at a clean no.","Ask: what do I actually want?"],"2 is strongest at…","The join between people","A solo charge","A public stage"],
   ["Number 3","Words, colour, a light touch. Can scatter when the work gets dull.",["Good at expression.","Harder at finishing.","Ask: what is the one thing to complete?"],"3 can stall when…","The work turns dull","Someone praises them","They are talking"],
   ["Number 4","Builds the frame. Likes a plan. Can grip the plan after it has stopped helping.",["Good at structure.","Harder at a late change.","Ask: is this order serving the job?"],"4 reaches for…","A frame","A whim","The spotlight"],
   ["Number 5","Moves. Tries the next thing. Can leave before the useful part.",["Good at change.","Harder at staying.","Ask: have I stayed long enough to learn it?"],"5 is pulled by…","Change","A fixed desk","Repetition"],
@@ -125,7 +132,7 @@ const lessons = [
   ["Number 8","Handles matter, money, weight. Can measure a person by output.",["Good at results.","Harder at rest.","Ask: what is enough?"],"8 watches…","Results","Mood alone","Gossip"],
   ["Number 9, 11, 22","9 closes a cycle and gives it away. 11 is a 2 with a brighter signal. 22 is a 4 that can hold a larger build. Leave 11 and 22 whole.",["9 lets go.","11 feels the room early.","22 needs a real structure, not just a vision."],"22 should be…","Left as 22","Reduced to 4 at once","Dropped"]
 ];
-const meanings = {1:"Starts. Wants the first move.",2:"Joins. Reads the room.",3:"Speaks. Scatters if bored.",4:"Frames. Holds the plan.",5:"Moves. Leaves early.",6:"Tends. Can over-tend.",7:"Studies. Needs quiet.",8:"Builds weight and results.",9:"Closes and gives away.",11:"A brighter 2. Leave it whole.",22:"A larger 4. Leave it whole."};
+const meanings = {1:"Starts. Wants the first move.",2:"Joins. Reads the room.",3:"Speaks. Scatters if bored.",4:"Frames. Holds the plan.",5:"Moves. Leaves early.",6:"Tends. Can over-tend.",7:"Studies. Needs quiet.",8:"Builds weight and results.",9:"Closes and gives away.",11:"A brighter 2. Leave it whole.",22:"A larger 4. Leave it whole."}
 let cur = 0;
 function load(){ try { return JSON.parse(localStorage.getItem("ns-done")||"[]"); } catch(e){ return []; } }
 function save(a){ localStorage.setItem("ns-done", JSON.stringify(a)); }
